@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ exercise.name }}</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+        }
+        .subtle {
+            color: #d2d2d2;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+
+    <h1>📊 {{ exercise.name }}</h1>
+
+    <a href="/" class="btn btn-outline-light mb-3">Voltar</a>
+    <p class="subtle small">Linha do tempo: cada ponto é uma série registrada (neste exercício), em ordem.</p>
+
+    <canvas id="chart" height="120"></canvas>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const weights = {{ weights | tojson }};
+        const reps = {{ reps | tojson }};
+        const ctx = document.getElementById('chart');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: weights.map(function (_, i) { return 'Série ' + (i + 1); }),
+                datasets: [
+                    {
+                        label: 'Peso (kg)',
+                        data: weights,
+                        borderColor: '#1f6feb',
+                        backgroundColor: 'rgba(31, 111, 235, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.2
+                    },
+                    {
+                        label: 'Reps',
+                        data: reps,
+                        borderColor: '#ffcf4a',
+                        backgroundColor: 'rgba(255, 207, 74, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#f0f0f0' }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#d2d2d2' },
+                        grid: { color: 'rgba(255,255,255,0.08)' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#d2d2d2' },
+                        grid: { color: 'rgba(255,255,255,0.08)' }
+                    }
+                }
+            }
+        });
+    });
+    </script>
+</body>
+</html>
